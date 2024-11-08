@@ -35,27 +35,29 @@ export function getWeekDates(date: Date): Date[] {
 export function getWeeksAtMonth(currentDate: Date) {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
+  /** 월의 일수 */
   const daysInMonth = getDaysInMonth(year, month + 1);
+  /** 월의 첫 날짜 */
   const firstDayOfMonth = new Date(year, month, 1).getDay();
+  /** 월의 모든 날짜의 배열 */
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const weeks = [];
+  /** 필요한 총 주의 개수 계산 */
+  const totalWeeks = Math.ceil((firstDayOfMonth + daysInMonth) / 7);
+  /** 초기 주 배열 생성 */
+  const initialWeeks = Array.from({ length: totalWeeks }, () => Array(7).fill(null));
 
-  const initWeek = () => Array(7).fill(null);
-
-  let week: Array<number | null> = initWeek();
-
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    week[i] = null;
-  }
-
-  for (const day of days) {
+  /** 월의 모든 주의 배열 */
+  const weeks = days.reduce((acc: Array<Array<number | null>>, day: number) => {
+    /** 주에 해당하는 날짜 인덱스 */
     const dayIndex = (firstDayOfMonth + day - 1) % 7;
-    week[dayIndex] = day;
-    if (dayIndex === 6 || day === daysInMonth) {
-      weeks.push(week);
-      week = initWeek();
-    }
-  }
+    /** 월에 해당하는 주 인덱스 */
+    const weekIndex = Math.floor((firstDayOfMonth + day - 1) / 7);
+
+    // 현재 날짜 설정
+    acc[weekIndex][dayIndex] = day;
+
+    return acc;
+  }, initialWeeks);
 
   return weeks;
 }
