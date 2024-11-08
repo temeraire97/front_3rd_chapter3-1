@@ -1,5 +1,4 @@
 import { act, renderHook } from '@testing-library/react';
-import { FC } from 'react';
 
 import { fillZero } from '../utils/dateUtils';
 
