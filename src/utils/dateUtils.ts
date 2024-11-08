@@ -16,13 +16,16 @@ export function getDaysInMonth(year: number, month: number): number {
 export function getWeekDates(date: Date): Date[] {
   const day = date.getDay();
   const diff = date.getDate() - day;
+  /** 주의 첫 날짜 */
   const sunday = new Date(date.setDate(diff));
-  const weekDates = [];
-  for (let i = 0; i < 7; i++) {
+
+  /** 주의 모든 날짜 */
+  const weekDates = Array.from({ length: 7 }, (_, i) => {
     const nextDate = new Date(sunday);
     nextDate.setDate(sunday.getDate() + i);
-    weekDates.push(nextDate);
-  }
+    return nextDate;
+  });
+
   return weekDates;
 }
 
