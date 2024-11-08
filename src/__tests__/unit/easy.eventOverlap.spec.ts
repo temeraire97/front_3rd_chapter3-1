@@ -1,3 +1,4 @@
+import events from '../../__mocks__/response/events.json';
 import { Event } from '../../types';
 import {
   convertEventToDateRange,
@@ -26,11 +27,26 @@ describe('parseDateTime', () => {
 });
 
 describe('convertEventToDateRange', () => {
-  it('일반적인 이벤트를 올바른 시작 및 종료 시간을 가진 객체로 변환한다', () => {});
+  const event = events.events[0] as Event;
 
-  it('잘못된 날짜 형식의 이벤트에 대해 Invalid Date를 반환한다', () => {});
+  it('일반적인 이벤트를 올바른 시작 및 종료 시간을 가진 객체로 변환한다', () => {
+    expect(convertEventToDateRange(event)).toEqual({
+      start: parseDateTime(event.date, event.startTime),
+      end: parseDateTime(event.date, event.endTime),
+    });
+  });
 
-  it('잘못된 시간 형식의 이벤트에 대해 Invalid Date를 반환한다', () => {});
+  it('잘못된 날짜 형식의 이벤트에 대해 Invalid Date를 반환한다', () => {
+    const invalidEvent = { ...event, date: '24.07.01' };
+
+    expect(convertEventToDateRange(invalidEvent).start.toString()).toBe('Invalid Date');
+  });
+
+  it('잘못된 시간 형식의 이벤트에 대해 Invalid Date를 반환한다', () => {
+    const invalidEvent = { ...event, startTime: '14시 30분' };
+
+    expect(convertEventToDateRange(invalidEvent).start.toString()).toBe('Invalid Date');
+  });
 });
 
 describe('isOverlapping', () => {
