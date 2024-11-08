@@ -70,22 +70,30 @@ export function getEventsForDay(events: Event[], date: number): Event[] {
 }
 
 /**
- * 주어진 날짜에 해당하는 주의 정보를 반환합니다.
+ * 주어진 날짜의 주 정보를 "YYYY년 M월 W주" 형식으로 반환합니다. (목요일 기준)
  */
 export function formatWeek(targetDate: Date) {
+  /** 주어진 날짜의 요일 (0: 일요일, 6: 토요일) */
   const dayOfWeek = targetDate.getDay();
+  /** 해당 주의 목요일까지의 날짜 차이 */
   const diffToThursday = 4 - dayOfWeek;
+  /** 해당 주의 목요일 날짜 */
   const thursday = new Date(targetDate);
   thursday.setDate(targetDate.getDate() + diffToThursday);
 
+  /** 목요일이 속한 연도 */
   const year = thursday.getFullYear();
+  /** 목요일이 속한 월 (1-12) */
   const month = thursday.getMonth() + 1;
 
+  /** 목요일이 속한 월의 첫 날짜 */
   const firstDayOfMonth = new Date(thursday.getFullYear(), thursday.getMonth(), 1);
 
+  /** 해당 월의 첫 번째 목요일 */
   const firstThursday = new Date(firstDayOfMonth);
   firstThursday.setDate(1 + ((4 - firstDayOfMonth.getDay() + 7) % 7));
 
+  /** 해당 날짜가 속한 주차 번호 */
   const weekNumber: number =
     Math.floor((thursday.getTime() - firstThursday.getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1;
 
