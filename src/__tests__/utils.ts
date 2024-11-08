@@ -4,6 +4,7 @@ export const assertDate = (date1: Date, date2: Date) => {
   expect(date1.toISOString()).toBe(date2.toISOString());
 };
 
+// 시간 포맷 변환
 export const parseHM = (timestamp: number) => {
   const date = new Date(timestamp);
   const h = fillZero(date.getHours());
