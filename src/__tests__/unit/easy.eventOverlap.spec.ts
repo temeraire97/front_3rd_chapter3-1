@@ -27,7 +27,7 @@ describe('parseDateTime', () => {
 });
 
 describe('convertEventToDateRange', () => {
-  const event = events.events[0] as Event;
+  const event = { ...events.events[0] } as Event;
 
   it('일반적인 이벤트를 올바른 시작 및 종료 시간을 가진 객체로 변환한다', () => {
     expect(convertEventToDateRange(event)).toEqual({
@@ -50,9 +50,16 @@ describe('convertEventToDateRange', () => {
 });
 
 describe('isOverlapping', () => {
-  it('두 이벤트가 겹치는 경우 true를 반환한다', () => {});
+  const event1 = { ...events.events[0] } as Event;
+  const event2 = { ...events.events[0], startTime: '10:00', endTime: '11:00' } as Event;
 
-  it('두 이벤트가 겹치지 않는 경우 false를 반환한다', () => {});
+  it('두 이벤트가 겹치는 경우 true를 반환한다', () => {
+    expect(isOverlapping(event1, event1)).toBe(true);
+  });
+
+  it('두 이벤트가 겹치지 않는 경우 false를 반환한다', () => {
+    expect(isOverlapping(event1, event2)).toBe(false);
+  });
 });
 
 describe('findOverlappingEvents', () => {
