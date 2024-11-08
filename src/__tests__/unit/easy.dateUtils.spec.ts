@@ -122,13 +122,39 @@ describe('getWeeksAtMonth', () => {
 });
 
 describe('getEventsForDay', () => {
-  it('특정 날짜(1일)에 해당하는 이벤트만 정확히 반환한다', () => {});
+  const events: Event[] = [
+    {
+      id: '1',
+      title: '기존 회의',
+      date: '2024-10-01',
+      startTime: '09:00',
+      endTime: '10:00',
+      description: '기존 팀 미팅',
+      location: '회의실 B',
+      category: '업무',
+      repeat: { type: 'none', interval: 0 },
+      notificationTime: 10,
+    },
+  ];
+  it('특정 날짜(1일)에 해당하는 이벤트만 정확히 반환한다', () => {
+    const date = new Date('2024-10-01');
+    expect(getEventsForDay(events, date.getDate())).toEqual([events[0]]);
+  });
 
-  it('해당 날짜에 이벤트가 없을 경우 빈 배열을 반환한다', () => {});
+  it('해당 날짜에 이벤트가 없을 경우 빈 배열을 반환한다', () => {
+    const date = new Date('2024-10-02');
+    expect(getEventsForDay(events, date.getDate())).toEqual([]);
+  });
 
-  it('날짜가 0일 경우 빈 배열을 반환한다', () => {});
+  it('날짜가 0일 경우 빈 배열을 반환한다', () => {
+    const date = new Date('2024-10-00');
+    expect(getEventsForDay(events, date.getDate())).toEqual([]);
+  });
 
-  it('날짜가 32일 이상인 경우 빈 배열을 반환한다', () => {});
+  it('날짜가 32일 이상인 경우 빈 배열을 반환한다', () => {
+    const date = new Date('2024-10-32');
+    expect(getEventsForDay(events, date.getDate())).toEqual([]);
+  });
 });
 
 describe('formatWeek', () => {
